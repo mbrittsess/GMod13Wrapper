@@ -1,0 +1,27 @@
+New Vanillin Release Package 1 Release Notes:
+
+* In order to build a library using Vanillin for GMod, all one needs to do is build the Lua library as normal, but at the link step, replace the "lua51.lib" import library with the "lua51.lib" static library provided with Vanillin. 
+  The usual method I've used for doing this is to replace the /LIBPATH: directive giving the path to the import library with a /LIBPATH: directive giving the path to my static library instead. Another alternative would be to give the /LIBPATH: for my static library *before* the /LIBPATH: for the import library.
+
+* To use the sample libraries that are included, put the *contents* of the "BinaryModules" folder into "garrysmod\garrysmod\lua\bin\" and put the contents of the "LuaModules" folder into "garrysmod\garrysmod\lua\includes\modules\" folder.
+
+* Vanillin's functions should behave correctly from within their own libraries for all basic behavior. They are not guaranteed to provide the same behavior if you go poking around inside them with the debug library, or to work correctly with values provided from other libraries. Nevertheless, I've worked hard to make sure that they should work, within reason, with values from other libraries, and they *should* work correctly with values provided by other libraries that are using the same version of Vanillin.
+
+* Certain functions do not work correctly, and never will. None of them will crash your process (well, they *shouldn't*) but most will throw an error. They are:
+** lua_newstate() --Actually, this one will not throw an error, but instead always returns NULL, which *is* correct behavior.
+** lua_close()
+** lua_atpanic()
+** lua_checkstack() --This one always returns true, unless you give it nonsensical input.
+** lua_dump()
+** lua_getallocf()
+** lua_setallocf()
+
+* Certain functions do not work correctly, but might in the future. As above, none of them will crash your process but most of them will throw an error.
+** lua_newthread()
+** lua_xmove()
+** lua_tothread()
+** lua_yield()
+** lua_resume()
+** lua_status()
+
+* Other than the listed ones, I've worked hard to make sure that all functions provide the same behavior that they do in the normal Lua 5.1.4 build, referring to both the Reference Manual and the source code itself at times. Please let me know of any discrepancies in their behavior; this is, after all, the purpose of the Test Releases. You can contact me at facepunch.com as 'Infectious'.
